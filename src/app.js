@@ -2,11 +2,8 @@
 
 console.log("app.js is running");
 
-var template = React.createElement(
-  "h1",
-  null,
-  "Indecision App - JSX!"
-);
+// JSX - JavaScript XML
+var template = <h1>This is a JSX template in src/app.js - very cool</h1>;
 
 var appRoot = document.getElementById('root');
 
