@@ -25,22 +25,32 @@ const onFormSubmit = (e) => {
         renderFunc();
     }
 };
-      
+
+const makeDecision = () => {
+    const randomNum = Math.floor(Math.random() * app.options.length);
+    console.log(randomNum);
+    const option = app.options[option];
+};
+
 const renderFunc = () => {
     const template = (
 	<div>
 	  <h1>{app.title}</h1>
 	  <h2>{app.subtitle ? "Subtitle: " + app.subtitle : "none"}</h2>
-	  <h2>{app.options.length > 0 ? app.options.join(' ') : 'no options'}</h2>
-          <button name='reset' onClick={reset} >Reset options</button>
-          <form onSubmit={onFormSubmit}>
+          <ol>
+            {app.options.length > 0 ? app.options.map((o) => <li key={o}>{o}</li>): "no options"}
+        </ol>
+
+            <button disabled={app.options.length == 0} name='makeDecision' onClick={makeDecision}>Make Decision</button><br/>
+            <button name='reset' onClick={reset} >Reset options</button>
+            <form onSubmit={onFormSubmit}>
             <input type="text" name="optionText"/>
             <button>add option</button>
-          </form>
-        </div>
+            </form>
+            </div>
     );
 
-    ReactDOM.render(template, appRoot)
+    ReactDOM.render(template, appRoot);
  };
 
 const reset = () => {
