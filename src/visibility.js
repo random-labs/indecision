@@ -1,5 +1,3 @@
-"use strict";
-
 var appRoot = document.getElementById('root');
 
 let hidden = true;
