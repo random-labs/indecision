@@ -1,9 +1,29 @@
+class IndecisionApp extends React.Component {
+    constructor() {
+        super();
+        this.title =  'Indecisions, indecisions...';
+        this.subtitle = 'Put your life in the hands of a computer';
+        this.options = ['first', 'second', 'third'];
+    }
+
+    render() {
+        return(
+            <div>
+              <Header title={this.title}/>
+              <Action/>
+              <AddOption/>
+              <Options optionsList={this.options}/>
+            </div>
+        );
+    }
+}
+
 class Header extends React.Component {
     render() {
         return (
             <div>
-              <h1>Indecision</h1>
-              <h2>Put your life in the hands of a computer</h2>
+              <h1>{this.props.title}</h1>
+              <h2>{this.props.subtitle}</h2>
             </div>
         );
     }
@@ -23,7 +43,20 @@ class Options extends React.Component {
     render() {
         return (
             <div>
-              <p>This is going to be a list of Options</p>
+              <ol>
+                {this.props.optionsList.map((o) =>
+                <Option key={o} optionText={o}/>)}
+            </ol>
+                </div>
+        );
+    }
+}
+
+class Option extends React.Component {
+    render() {
+        return (
+            <div>
+              <li>{this.props.optionText}</li>
             </div>
         );
     }
@@ -39,13 +72,4 @@ class AddOption extends React.Component {
     }
 }
 
-const jsx = (
-    <div>
-      <Header/>
-      <Action/>
-      <AddOption/>
-      <Options/>
-    </div>
-);
-
-ReactDOM.render(jsx, document.getElementById('root'));
+ReactDOM.render(<IndecisionApp/>, document.getElementById('root'));
