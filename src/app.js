@@ -1,27 +1,47 @@
-const obj = {
-    name: 'Fook',
-    getName() {
-        return this.name;
-    }
-};
-
-const getNameF = obj.getName;
 
 class IndecisionApp extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        this.state = {
+            options: ['first-o', 'second-o', 'third-o-o']
+        };
         this.title =  'Indecisions, indecisions...';
         this.subtitle = 'Put your life in the hands of a computer';
-        this.options = ['first', 'second', 'third'];
+    }
+    handleRemoveAll() {
+        this.setState(() => {
+            return {
+                options:[]
+            }})
+    }
+    handleMakeDecision() {
+        const rand = Math.floor(Math.random() * this.state.options.length);
+        alert(this.state.options[rand]);
+    }
+    handleAddOption(newOpt) {
+        if (!newOpt) {
+            return "Enter something, buddy!";
+        } else if (this.state.options.indexOf(newOpt) > -1) {
+            return "Enter something new, buddy!";
+        }
+        this.setState((oldState) => {
+            return {
+                options: oldState.options.concat(newOpt)
+            }})
     }
 
     render() {
         return(
             <div>
               <Header title={this.title}/>
-              <Action/>
-              <AddOption/>
-              <Options optionsList={this.options}/>
+              <Action
+                hasOptions={this.state.options.length > 0}
+                makeDecision={this.handleMakeDecision.bind(this)}
+                />
+              <AddOption addOptionHandler={this.handleAddOption.bind(this)} />
+              <Options
+                removeAllHandler={this.handleRemoveAll.bind(this)}
+                optionsList={this.state.options}/>
             </div>
         );
     }
@@ -39,35 +59,25 @@ class Header extends React.Component {
 }
 
 class Action extends React.Component {
-    handlePick() {
-        console.log("pick clicked");
-    }
     render() {
         return (
             <div>
-              <button onClick={this.handlePick}>What should I do?</button>
+              <button
+                onClick={this.props.makeDecision}
+                disabled={!this.props.hasOptions}
+                >
+                What should I do?
+              </button>
             </div>
         );
     }
 }
 
 class Options extends React.Component {
-    constructor(props) {
-        super(props);
-        this.handleRemoveAll = this.handleRemoveAll.bind(this);
-        this.state = {
-            options = [];
-        };
-    }
-    handleRemoveAll() {
-        console.log("removeAll clicked");
-        // this.props crashes here, because 'this' binding is lost
-        console.log(this.props);
-    }
     render() {
         return (
             <div>
-              <button onClick={this.handleRemoveAll}>Remove All</button>
+              <button onClick={this.props.removeAllHandler}>Remove All</button>
               <ol>
                 {this.props.optionsList.map((o) =>
                 <Option key={o} optionText={o}/>)}
@@ -88,18 +98,29 @@ class Option extends React.Component {
 }
 
 class AddOption extends React.Component {
+    constructor(props) {
+        super(props);
+        this.onSubmit = this.onSubmit.bind(this);
+        this.state = {
+            error: undefined
+        }
+    }
     onSubmit(e) {
         e.preventDefault();
         const option = e.target.optionText.value.trim();
-        if (option) {
-            console.log(`option ${option} was submitted`);
-            e.target.optionText.value = '';
-        }
+        console.log(`passing ${option} to the handler upstairs`);
+        const error = this.props.addOptionHandler(option);
+        this.setState(() => {
+            return {error}
+        });
+        e.target.optionText.value = '';
+        
         return;
     }
     render() {
         return (
             <div>
+              <p>{this.state.error}</p>
               <form onSubmit={this.onSubmit}>
                 <input type="text" name="optionText"/>
                 <button>Add option</button>
