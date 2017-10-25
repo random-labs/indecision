@@ -7,17 +7,36 @@ class IndecisionApp extends React.Component {
         };
     }
 
+    // lifecycle methods
+    componentDidMount() {
+        try {
+            const json = localStorage.getItem('indecisionOptions');
+            const options = JSON.parse(json) || [];
+            this.setState(() => ({options}));
+            console.log("fetching data");
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    componentDidUpdate(prevProps, prevState) {
+        if(this.state.options.length !== prevState.options.length) {
+            const json = JSON.stringify(this.state.options);
+            localStorage.setItem('indecisionOptions', json);
+            console.log("saving updates");
+        }
+    }
+    componentWillUnmount() {
+        console.log("component did unmount");
+    }
     handleRemoveAll() {
         this.setState(() => ({ options:[] }));
     }
-
     removeOne(optionToRemove) {
         this.setState((oldState) => ({
             options:oldState.options.filter((option) =>
                                             optionToRemove !== option)
         })); 
     }
-
     handleMakeDecision() {
         const rand = Math.floor(Math.random() * this.state.options.length);
         alert(this.state.options[rand]);
@@ -32,7 +51,6 @@ class IndecisionApp extends React.Component {
             {options: oldState.options.concat(newOpt)}
         ));
     }
-
     render() {
         return(
             <div>
@@ -45,15 +63,11 @@ class IndecisionApp extends React.Component {
               <Options
                 removeOne={this.removeOne.bind(this)}
                 removeAllHandler={this.handleRemoveAll.bind(this)}
-                optionsList={this.state.options}/>
+                options={this.state.options}/>
             </div>
         );
     }
 }
-
-IndecisionApp.defaultProps = {
-    options: []
-};
 
 const Header = (props) => (
     <div>
@@ -80,8 +94,9 @@ const Action = (props) => (
 const Options = (props) => (
     <div>
       <button onClick={props.removeAllHandler}>Remove All</button>
+      {props.options.length == 0 && <p>add an option to get started</p>}
       <ol>
-        {props.optionsList.map((o) =>
+        {props.options.map((o) =>
                                <Option
                                      key={o}
                                      optionText={o}
@@ -116,8 +131,12 @@ class AddOption extends React.Component {
         const option = e.target.optionText.value.trim();
         console.log(`passing ${option} to the handler upstairs`);
         const error = this.props.addOptionHandler(option);
+
         this.setState(() => ({error}));
-        e.target.optionText.value = '';
+
+        if (!error) {
+            e.target.optionText.value = '';
+        }
     }
     render() {
         return (
