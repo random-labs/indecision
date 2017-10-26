@@ -1,11 +1,12 @@
 const path = require('path');
+const fullPath = path.join(__dirname, 'public');
 
-console.log();
+console.log("Full path is ", fullPath);
 
 module.exports = {
     entry: './src/app.js',
     output: {
-        path: path.join(__dirname, 'public'),
+        path: fullPath,
         filename: 'bundle.js'
     }
 };
