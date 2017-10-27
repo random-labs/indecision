@@ -1,15 +1,6 @@
-import './utils.js';
-import subtract, {
-    square, add
-} from './utils.js';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-console.log('app.js is running too!');
-console.log(square(5));
-console.log(add(11,22));
-console.log("Subtract: ", subtract(10,5));
+const template = <p>This IS JSX from webpack</p>
 
-const foo = () => {
-    console.log("foo");
-};
-
-console.log(foo());
+ReactDOM.render(template, document.getElementById('root'));
