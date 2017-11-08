@@ -6,7 +6,7 @@ const OptionModal = (props) => (
         isOpen={!!props.selectedOption}
         contentLabel="Selected Option"
         onRequestClose={props.handleOK}
-        closeTimeoutMS={400}
+        closeTimeoutMS={1000}
         className="modal"
     >
         <h3 className="modal__title">Selected Option</h3>

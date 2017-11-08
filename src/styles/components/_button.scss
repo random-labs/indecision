@@ -37,3 +37,9 @@ button:disabled {
     color: $off-white;
     padding: 0;
 }
+
+@media (max-width: $desktop-breakpoint) {
+    .big-button {
+        margin-bottom: $s-size;
+    }
+}
