@@ -4,3 +4,4 @@ node_modules/
 public/scripts/*
 *~
 *bundle.js
+.DS_Store
